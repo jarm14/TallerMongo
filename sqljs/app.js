@@ -1,19 +1,18 @@
-const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
+const express = require('express');
+const morgan = require('morgan');
+const app = express()
 
-const database = require('./app/config/dbconfig');
-
-/* Init database */
-database.init();
-
-app.set('port', process.env.PORT || 3000);
-app.listen(app.get('port'), () => {
-    console.log('server on port 30000');
-});
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+const { setRoutes } = require('./routes');
 
 
-app.use('/api', require('./app/routes/routes'));
+
+//middlewares
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+app.use(morgan('dev'));
+
+setRoutes(app);
+
+
+module.exports = app
